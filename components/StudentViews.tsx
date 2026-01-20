@@ -1,6 +1,6 @@
 
 import React, { useMemo } from 'react';
-import { User, FitnessRecord, FitnessLevel } from '../types';
+import { User, Student, FitnessRecord, FitnessLevel } from '../types';
 import { storage } from '../utils/storage';
 import { TEST_ITEMS, ITEM_COLORS } from '../constants';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer } from 'recharts';
@@ -11,6 +11,11 @@ interface StudentViewsProps {
 }
 
 const StudentViews: React.FC<StudentViewsProps> = ({ studentUser }) => {
+  const studentData = useMemo(() => {
+    const allStudents: Student[] = storage.get(storage.keys.STUDENTS, []);
+    return allStudents.find(s => s.studentId === studentUser.studentId);
+  }, [studentUser.studentId]);
+
   const latestRecord = useMemo(() => {
     const allRecords: FitnessRecord[] = storage.get(storage.keys.RECORDS, []);
     const studentRecords = allRecords
@@ -36,13 +41,25 @@ const StudentViews: React.FC<StudentViewsProps> = ({ studentUser }) => {
     });
   }, [latestRecord]);
 
-  const summary = {
-    weight: latestRecord?.weight || 0,
-    height: latestRecord?.height || 0,
-    bmi: latestRecord?.bmi || 0,
-    status: latestRecord && latestRecord.bmi > 0 ? (latestRecord.bmi < 18.5 ? 'ผอม' : latestRecord.bmi < 23 ? 'สมส่วน' : 'เริ่มอ้วน') : '-',
-    overall: latestRecord ? 'ปกติ' : '-'
-  };
+  const summary = useMemo(() => {
+    const weight = latestRecord?.weight || studentData?.weight || 0;
+    const height = latestRecord?.height || studentData?.height || 0;
+    
+    let bmi = 0;
+    if (weight > 0 && height > 0) {
+      const hInMeters = height / 100;
+      bmi = parseFloat((weight / (hInMeters * hInMeters)).toFixed(2));
+    }
+
+    const status = bmi > 0 ? (bmi < 18.5 ? 'ผอม' : bmi < 23 ? 'สมส่วน' : 'เริ่มอ้วน') : '-';
+    
+    return {
+      weight,
+      height,
+      bmi: latestRecord?.bmi || bmi || 0,
+      status
+    };
+  }, [latestRecord, studentData]);
 
   return (
     <div className="max-w-7xl mx-auto space-y-10 fade-in pb-16">

@@ -95,8 +95,8 @@ const AdminViews: React.FC<AdminViewsProps> = ({ activeTab }) => {
       return [
         s.studentId,
         s.name,
-        latest?.weight.toString() || '-',
-        latest?.height.toString() || '-',
+        (latest?.weight || s.weight || '-').toString(),
+        (latest?.height || s.height || '-').toString(),
         latest?.bmi.toString() || '-',
         latest ? 'ประเมินแล้ว' : 'รอดำเนินการ'
       ];
@@ -412,6 +412,7 @@ const AdminViews: React.FC<AdminViewsProps> = ({ activeTab }) => {
               <th className="px-8 py-6">ชื่อ-นามสกุล</th>
               <th className="px-8 py-6">เพศ</th>
               <th className="px-8 py-6">ชั้น</th>
+              <th className="px-8 py-6">นน./สส.</th>
               <th className="px-8 py-6 text-center">จัดการ</th>
             </tr>
           </thead>
@@ -426,6 +427,11 @@ const AdminViews: React.FC<AdminViewsProps> = ({ activeTab }) => {
                   </span>
                 </td>
                 <td className="px-8 py-5 font-bold text-slate-400">{classes.find(c => c.id === s.classId)?.name}</td>
+                <td className="px-8 py-5">
+                  <div className="text-[10px] font-bold text-slate-500">
+                    {s.weight || '-'} kg / {s.height || '-'} cm
+                  </div>
+                </td>
                 <td className="px-8 py-5">
                   <div className="flex items-center justify-center gap-2">
                     <button onClick={() => handleAddStudent(s)} className="p-3 text-teal-600 hover:bg-teal-100 rounded-2xl transition-all shadow-sm"><Edit2 size={18}/></button>
@@ -458,17 +464,44 @@ const AdminViews: React.FC<AdminViewsProps> = ({ activeTab }) => {
       title: isEdit ? 'แก้ไขข้อมูลนักเรียน' : 'เพิ่มนักเรียนใหม่',
       html: `
         <div class="text-left space-y-4 px-2">
-          <input id="swal-sid" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100" placeholder="รหัสประจำตัว" value="${s?.studentId || ''}">
-          <input id="swal-sname" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100" placeholder="ชื่อ-นามสกุล" value="${s?.name || ''}">
-          <select id="swal-sgender" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100">
-            <option value="${Gender.MALE}" ${s?.gender === Gender.MALE ? 'selected' : ''}>ชาย</option>
-            <option value="${Gender.FEMALE}" ${s?.gender === Gender.FEMALE ? 'selected' : ''}>หญิง</option>
-          </select>
-          <input id="swal-sbdate" type="date" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100" value="${s?.birthDate || ''}">
-          <select id="swal-sclass" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100">
-            <option value="">-- เลือกชั้น --</option>
-            ${classes.map(c => `<option value="${c.id}" ${s?.classId === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}
-          </select>
+          <div class="space-y-1">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">รหัสประจำตัว</label>
+            <input id="swal-sid" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100" placeholder="รหัสประจำตัว" value="${s?.studentId || ''}">
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">ชื่อ-นามสกุล</label>
+            <input id="swal-sname" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100" placeholder="ชื่อ-นามสกุล" value="${s?.name || ''}">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">เพศ</label>
+              <select id="swal-sgender" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100">
+                <option value="${Gender.MALE}" ${s?.gender === Gender.MALE ? 'selected' : ''}>ชาย</option>
+                <option value="${Gender.FEMALE}" ${s?.gender === Gender.FEMALE ? 'selected' : ''}>หญิง</option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">วันเกิด</label>
+              <input id="swal-sbdate" type="date" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100" value="${s?.birthDate || ''}">
+            </div>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">ชั้นเรียน</label>
+            <select id="swal-sclass" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100">
+              <option value="">-- เลือกชั้น --</option>
+              ${classes.map(c => `<option value="${c.id}" ${s?.classId === c.id ? 'selected' : ''}>${c.name}</option>`).join('')}
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-4 border-t pt-4 mt-4">
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">น้ำหนักปัจจุบัน (กก.)</label>
+              <input id="swal-sweight" type="number" step="0.1" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100" placeholder="น้ำหนัก" value="${s?.weight || ''}">
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">ส่วนสูงปัจจุบัน (ซม.)</label>
+              <input id="swal-sheight" type="number" step="0.1" class="swal2-input w-full m-0 rounded-2xl border-2 border-slate-100" placeholder="ส่วนสูง" value="${s?.height || ''}">
+            </div>
+          </div>
         </div>
       `,
       confirmButtonColor: '#26A69A',
@@ -479,6 +512,8 @@ const AdminViews: React.FC<AdminViewsProps> = ({ activeTab }) => {
         gender: (document.getElementById('swal-sgender') as HTMLSelectElement).value,
         birthDate: (document.getElementById('swal-sbdate') as HTMLInputElement).value,
         classId: (document.getElementById('swal-sclass') as HTMLSelectElement).value,
+        weight: parseFloat((document.getElementById('swal-sweight') as HTMLInputElement).value) || undefined,
+        height: parseFloat((document.getElementById('swal-sheight') as HTMLInputElement).value) || undefined,
       })
     });
 

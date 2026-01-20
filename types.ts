@@ -40,6 +40,8 @@ export interface Student {
   gender: Gender;
   birthDate: string;
   classId: string;
+  weight?: number;
+  height?: number;
 }
 
 export interface TestItem {
