@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบสมรรถภาพทางกายนักเรียน (กรมพลศึกษา 2562)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              teal_custom: '#26A69A',
+              green_custom: '#AED581',
+              amber_custom: '#FFCA28',
+              orange_custom: '#FF8A65',
+              red_custom: '#EF5350',
+            },
+            fontFamily: {
+              kanit: ['Kanit', 'sans-serif'],
+            },
+            boxShadow: {
+              'soft-xl': '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
+              'premium': '0 25px 50px -12px rgba(0, 0, 0, 0.15)',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f8fafc;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .lift-up {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .lift-up:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 30px 45px -12px rgb(0 0 0 / 0.15);
+        }
+        .dynamic-bg {
+            background: linear-gradient(-45deg, #00b4db, #0083b0, #26A69A, #AED581, #FFCA28);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "sweetalert2": "https://esm.sh/sweetalert2@^11.26.17"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="root"></div>
+    <!-- Entry Point for React Application -->
+    <script type="module" src="./index.tsx"></script>
+</body>
+</html>
