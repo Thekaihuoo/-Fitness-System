@@ -32,32 +32,44 @@
     <style>
         body {
             font-family: 'Kanit', sans-serif;
-            background-color: #f8fafc;
+            background-image: url('https://img2.pic.in.th/Copilot_20260108_111757.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             margin: 0;
             overflow-x: hidden;
+            min-height: 100vh;
+        }
+        /* Overlay to ensure readability while maintaining background */
+        #root::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(248, 250, 252, 0.55); /* Balanced overlay */
+            z-index: -1;
+            pointer-events: none;
         }
         .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .sidebar-glass {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
         }
         .lift-up {
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .lift-up:hover {
-            transform: translateY(-8px) scale(1.02);
+            transform: translateY(-8px) scale(1.01);
             box-shadow: 0 30px 45px -12px rgb(0 0 0 / 0.15);
-        }
-        .dynamic-bg {
-            background: linear-gradient(-45deg, #00b4db, #0083b0, #26A69A, #AED581, #FFCA28);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-        }
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
         .fade-in {
             animation: fadeIn 0.8s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
@@ -66,9 +78,15 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        input::placeholder {
-            color: #94a3b8;
-            font-weight: 400;
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(0,0,0,0.1);
+          border-radius: 10px;
         }
     </style>
 <script type="importmap">
@@ -86,7 +104,6 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Entry Point for React Application -->
     <script type="module" src="./index.tsx"></script>
 </body>
 </html>
